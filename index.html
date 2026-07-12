@@ -422,10 +422,14 @@
       .pulse-dot {
         width: 7px;
         height: 7px;
+        min-width: 7px;
+        min-height: 7px;
         border-radius: 50%;
         background: var(--accent);
         box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
         animation: pulse 2s infinite;
+        flex-shrink: 0;
+        display: inline-block;
       }
       @keyframes pulse {
         0% {
@@ -1298,7 +1302,19 @@
     <nav class="nav" id="nav">
       <div class="nav-inner">
         <div class="brand">
-          <span class="brand-mark">JA</span>
+          <span class="brand-mark">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="navShieldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#3B82F6"/>
+                  <stop offset="100%" stop-color="#22C55E"/>
+                </linearGradient>
+              </defs>
+              <rect width="100" height="100" rx="22" fill="#0B1120"/>
+              <path d="M50 20 L78 32 V52 C78 68 66 80 50 86 C34 80 22 68 22 52 V32 Z" fill="none" stroke="url(#navShieldStroke)" stroke-width="6"/>
+              <circle cx="50" cy="52" r="8" fill="#22C55E"/>
+            </svg>
+          </span>
           <div>
             Joseph Abidoye
             <div class="brand-sub">SOC ANALYST</div>
@@ -1467,7 +1483,7 @@
                 >Web AppSec</span
               >
             </div>
-            <h4>Web Application Vulnerabilities &amp; Exploitation DVWA</h4>
+            <h4>Web Application Vulnerabilities &amp; Exploitation — DVWA</h4>
             <p class="proj-desc">
               Discovered and exploited SQL Injection, Reflected XSS, and CSRF
               against DVWA, then produced OWASP-aligned remediation guidance.
@@ -1619,7 +1635,7 @@
               <div class="detail-field">
                 <span class="detail-label">What I Learned</span>
                 <p>
-                  How much signal hides in noisy logs and that threshold
+                  How much signal hides in noisy logs — and that threshold
                   tuning matters as much as detection logic: too low floods you
                   with false positives, too high misses slow attacks.
                 </p>
@@ -1695,8 +1711,8 @@
                     unauthorized access
                   </li>
                   <li>
-                    Built two parallel detection paths CloudWatch metric
-                    filters and EventBridge event rules and compared their
+                    Built two parallel detection paths — CloudWatch metric
+                    filters and EventBridge event rules — and compared their
                     speed
                   </li>
                   <li>
@@ -1713,7 +1729,7 @@
                 <span class="detail-label">What I Learned</span>
                 <p>
                   EventBridge reacted in under 10 seconds vs. 3–5 minutes for
-                  CloudWatch metric filters event-driven detection beats
+                  CloudWatch metric filters — event-driven detection beats
                   polling when response time matters, especially in
                   banking-grade environments.
                 </p>
@@ -1886,7 +1902,7 @@
               <div class="detail-field">
                 <span class="detail-label">What I Learned</span>
                 <p>
-                  VLANs alone only separate broadcast domains real access
+                  VLANs alone only separate broadcast domains — real access
                   control needs ACLs layered on top, and testing with actual
                   ping/traceroute is the only way to confirm a "deny" rule
                   behaves as intended.
@@ -1966,7 +1982,7 @@
                     Investigated the alert to determine likely cause and impact
                   </li>
                   <li>
-                    Tied the finding to compliance frameworks PCI DSS and ISO
+                    Tied the finding to compliance frameworks — PCI DSS and ISO
                     27001
                   </li>
                 </ul>
@@ -1974,7 +1990,7 @@
               <div class="detail-field">
                 <span class="detail-label">What I Learned</span>
                 <p>
-                  FIM alerts are only as useful as the baseline behind them
+                  FIM alerts are only as useful as the baseline behind them —
                   you need to know which files should never change before the
                   checksum mismatch means anything.
                 </p>
@@ -2100,7 +2116,7 @@
               </button>
               <a
                 class="proj-link"
-                href="https://github.com/iamtimofe/Joseph-Abidoye-Cybersecurity-Portfolio"
+                href="https://github.com/iamtimofe/Joseph-Abidoye-Cybersecurity-Portfolio/blob/main/Labs/Home-Virtual-Lab-Setup.md"
                 target="_blank"
                 rel="noopener"
                 >View report <span class="arrow">→</span></a
@@ -2132,8 +2148,8 @@
               <div class="detail-field">
                 <span class="detail-label">What I Learned</span>
                 <p>
-                  Getting the lab environment right upfront instead of
-                  fighting networking issues mid-exercise saves far more time
+                  Getting the lab environment right upfront — instead of
+                  fighting networking issues mid-exercise — saves far more time
                   than it costs.
                 </p>
               </div>
