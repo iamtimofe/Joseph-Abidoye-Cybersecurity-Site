@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      (function () {
+        function autoTheme() {
+          var h = new Date().getHours();
+          return h >= 6 && h < 18 ? "light" : "dark";
+        }
+        var saved = localStorage.getItem("theme-preference");
+        document.documentElement.setAttribute(
+          "data-theme",
+          saved || autoTheme(),
+        );
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Joseph Abidoye's Portfolio</title>
@@ -31,6 +44,7 @@
     <style>
       :root {
         --void: #0b1120;
+        --void-rgb: 11, 17, 32;
         --surface: #111827;
         --card: #1f2937;
         --card-hi: #232f3f;
@@ -48,10 +62,52 @@
         --faint: #5b6b81;
         --border: rgba(255, 255, 255, 0.08);
         --border-hi: rgba(255, 255, 255, 0.14);
+        --grid-line: rgba(255, 255, 255, 0.035);
+        --overlay-rgb: 255, 255, 255;
         --disp: "Space Grotesk", sans-serif;
         --sans: "Inter", system-ui, sans-serif;
         --mono: "JetBrains Mono", ui-monospace, monospace;
         --maxw: 1200px;
+      }
+
+      :root[data-theme="light"] {
+        --void: #f4f6fb;
+        --void-rgb: 244, 246, 251;
+        --surface: #ffffff;
+        --card: #ffffff;
+        --card-hi: #eef1f7;
+        --primary: #2563eb;
+        --primary-soft: rgba(37, 99, 235, 0.1);
+        --primary-line: rgba(37, 99, 235, 0.35);
+        --accent: #16a34a;
+        --accent-soft: rgba(22, 163, 74, 0.12);
+        --amber: #b45309;
+        --amber-soft: rgba(180, 83, 9, 0.12);
+        --red: #dc2626;
+        --red-soft: rgba(220, 38, 38, 0.1);
+        --text: #0f172a;
+        --muted: #475569;
+        --faint: #8291a4;
+        --border: rgba(15, 23, 42, 0.09);
+        --border-hi: rgba(15, 23, 42, 0.16);
+        --grid-line: rgba(15, 23, 42, 0.045);
+        --overlay-rgb: 15, 23, 42;
+      }
+
+      html {
+        transition: background 0.35s ease;
+      }
+      body,
+      .nav,
+      .card,
+      .proj-card,
+      .comp-card,
+      .skill-cat-card,
+      .connect-card {
+        transition:
+          background 0.35s ease,
+          color 0.35s ease,
+          border-color 0.35s ease;
       }
 
       * {
@@ -122,12 +178,8 @@
         position: absolute;
         inset: 0;
         background-image:
-          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-          linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.035) 1px,
-            transparent 1px
-          );
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
         background-size: 48px 48px;
         mask-image: radial-gradient(
           ellipse 70% 50% at 50% 0%,
@@ -184,7 +236,7 @@
         left: 0;
         right: 0;
         z-index: 50;
-        background: rgba(11, 17, 32, 0.65);
+        background: rgba(var(--void-rgb), 0.65);
         backdrop-filter: blur(16px) saturate(140%);
         -webkit-backdrop-filter: blur(16px) saturate(140%);
         border-bottom: 1px solid transparent;
@@ -194,7 +246,7 @@
       }
       .nav.scrolled {
         border-bottom-color: var(--border);
-        background: rgba(11, 17, 32, 0.85);
+        background: rgba(var(--void-rgb), 0.85);
       }
       .nav-inner {
         max-width: var(--maxw);
@@ -274,24 +326,28 @@
         width: 36px;
         height: 36px;
         border-radius: 9px;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border-hi);
+        background: var(--card);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--muted);
+        color: var(--text);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
         transition:
           border-color 0.2s,
           color 0.2s,
-          background 0.2s;
+          background 0.2s,
+          transform 0.15s;
       }
       .nav-icon-btn:hover {
         border-color: var(--primary-line);
         color: var(--primary);
         background: var(--primary-soft);
+        transform: translateY(-1px);
       }
       .nav-icon-btn svg {
-        width: 16px;
-        height: 16px;
+        width: 17px;
+        height: 17px;
       }
 
       .hamburger {
@@ -311,21 +367,44 @@
       }
 
       .mobile-menu {
-        display: none;
+        display: flex;
         position: fixed;
         top: 62px;
         left: 0;
         right: 0;
         z-index: 49;
-        background: rgba(11, 17, 32, 0.97);
+        background: rgba(var(--void-rgb), 0.97);
         backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--border);
-        padding: 18px 28px 26px;
+        padding: 0 28px;
         flex-direction: column;
         gap: 4px;
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-10px);
+        overflow: hidden;
+        pointer-events: none;
+        visibility: hidden;
+        transition:
+          max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.28s ease,
+          transform 0.32s cubic-bezier(0.4, 0, 0.2, 1),
+          padding 0.38s ease,
+          visibility 0s linear 0.38s;
       }
       .mobile-menu.open {
-        display: flex;
+        max-height: 480px;
+        opacity: 1;
+        transform: translateY(0);
+        padding: 18px 28px 26px;
+        pointer-events: auto;
+        visibility: visible;
+        transition:
+          max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.32s ease 0.04s,
+          transform 0.36s cubic-bezier(0.4, 0, 0.2, 1),
+          padding 0.38s ease,
+          visibility 0s linear 0s;
       }
       .mobile-menu a {
         padding: 12px 4px;
@@ -333,9 +412,52 @@
         font-weight: 500;
         color: var(--muted);
         border-bottom: 1px solid var(--border);
+        opacity: 0;
+        transform: translateY(-6px);
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease,
+          color 0.2s ease;
+      }
+      .mobile-menu.open a {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .mobile-menu.open a:nth-child(1) {
+        transition-delay: 0.06s;
+      }
+      .mobile-menu.open a:nth-child(2) {
+        transition-delay: 0.1s;
+      }
+      .mobile-menu.open a:nth-child(3) {
+        transition-delay: 0.14s;
+      }
+      .mobile-menu.open a:nth-child(4) {
+        transition-delay: 0.18s;
+      }
+      .mobile-menu.open a:nth-child(5) {
+        transition-delay: 0.22s;
+      }
+      .mobile-menu.open a:nth-child(6) {
+        transition-delay: 0.26s;
       }
       .mobile-menu a:last-child {
         border-bottom: none;
+      }
+      .hamburger svg .h-line {
+        transition:
+          transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.2s ease;
+        transform-origin: center;
+      }
+      .hamburger[aria-expanded="true"] svg .h-line-top {
+        transform: translateY(6px) rotate(45deg);
+      }
+      .hamburger[aria-expanded="true"] svg .h-line-mid {
+        opacity: 0;
+      }
+      .hamburger[aria-expanded="true"] svg .h-line-bottom {
+        transform: translateY(-6px) rotate(-45deg);
       }
 
       @media (max-width: 860px) {
@@ -381,13 +503,13 @@
         transform: translateY(-1px);
       }
       .btn-ghost {
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(var(--overlay-rgb), 0.03);
         border-color: var(--border);
         color: var(--text);
       }
       .btn-ghost:hover {
         border-color: var(--border-hi);
-        background: rgba(255, 255, 255, 0.06);
+        background: rgba(var(--overlay-rgb), 0.06);
         transform: translateY(-1px);
       }
       .btn-sm {
@@ -478,7 +600,7 @@
         border-radius: 7px;
         border: 1px solid var(--border);
         color: var(--muted);
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(var(--overlay-rgb), 0.02);
       }
 
       .cta-row {
@@ -557,7 +679,7 @@
         padding: 6px 16px;
         border: 1px solid var(--border);
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(var(--overlay-rgb), 0.02);
       }
 
       @media (max-width: 980px) {
@@ -702,7 +824,7 @@
         font-family: var(--mono);
         padding: 4px 9px;
         border-radius: 6px;
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(var(--overlay-rgb), 0.04);
         color: var(--muted);
         border: 1px solid var(--border);
       }
@@ -760,7 +882,7 @@
         padding: 8px 15px;
         border-radius: 999px;
         border: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(var(--overlay-rgb), 0.02);
         transition:
           border-color 0.2s,
           color 0.2s,
@@ -938,7 +1060,7 @@
         font-weight: 500;
         padding: 6px 12px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(var(--overlay-rgb), 0.03);
         border: 1px solid var(--border);
         color: var(--muted);
         transition:
@@ -1002,7 +1124,7 @@
         color: var(--accent);
       }
       .cert-status.todo {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(var(--overlay-rgb), 0.05);
         color: var(--muted);
       }
       .cert-card h4 {
@@ -1376,16 +1498,32 @@
       <div class="nav-inner">
         <div class="brand">
           <span class="brand-mark">
-            <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="100"
+              height="100"
+              viewBox="0 0 100 100"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <defs>
-                <linearGradient id="navShieldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#3B82F6"/>
-                  <stop offset="100%" stop-color="#22C55E"/>
+                <linearGradient
+                  id="navShieldStroke"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="#3B82F6" />
+                  <stop offset="100%" stop-color="#22C55E" />
                 </linearGradient>
               </defs>
-              <rect width="100" height="100" rx="22" fill="#0B1120"/>
-              <path d="M50 20 L78 32 V52 C78 68 66 80 50 86 C34 80 22 68 22 52 V32 Z" fill="none" stroke="url(#navShieldStroke)" stroke-width="6"/>
-              <circle cx="50" cy="52" r="8" fill="#22C55E"/>
+              <rect width="100" height="100" rx="22" fill="#0B1120" />
+              <path
+                d="M50 20 L78 32 V52 C78 68 66 80 50 86 C34 80 22 68 22 52 V32 Z"
+                fill="none"
+                stroke="url(#navShieldStroke)"
+                stroke-width="6"
+              />
+              <circle cx="50" cy="52" r="8" fill="#22C55E" />
             </svg>
           </span>
           <div>
@@ -1401,6 +1539,23 @@
           <a href="#contact">Contact</a>
         </div>
         <div class="nav-actions">
+          <button
+            class="nav-icon-btn"
+            id="themeToggle"
+            onclick="toggleTheme()"
+            aria-label="Toggle light/dark mode"
+            title="Toggle theme"
+          >
+            <svg
+              id="themeIcon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></svg>
+          </button>
           <a
             class="nav-icon-btn gh-desktop"
             href="https://github.com/iamtimofe/Joseph-Abidoye-Cybersecurity-Portfolio"
@@ -1433,9 +1588,15 @@
               stroke-width="2"
               stroke-linecap="round"
             >
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
+              <line class="h-line h-line-top" x1="3" y1="6" x2="21" y2="6" />
+              <line class="h-line h-line-mid" x1="3" y1="12" x2="21" y2="12" />
+              <line
+                class="h-line h-line-bottom"
+                x1="3"
+                y1="18"
+                x2="21"
+                y2="18"
+              />
             </svg>
           </button>
         </div>
@@ -1500,7 +1661,7 @@
             <a class="btn btn-ghost" href="#contact">Contact Me</a>
           </div>
           <div class="stat-row">
-            <div class="stat"><b>8</b><span>Projects Logged</span></div>
+            <div class="stat"><b>9</b><span>Projects Logged</span></div>
             <div class="stat"><b>6</b><span>Security Domains</span></div>
             <div class="stat"><b>NG</b><span>Based In</span></div>
             <div class="stat"><b>Nov '25</b><span>Started Training</span></div>
@@ -1521,7 +1682,7 @@
               <div class="avatar-fallback" style="display: none">JA</div>
             </div>
           </div>
-         <!-- <div class="avatar-tag">SOC-2026 // JA</div>  -->
+          <!-- <div class="avatar-tag">SOC-2026 // JA</div>  -->
         </div>
       </div>
 
@@ -1546,6 +1707,100 @@
         </div>
 
         <div class="proj-grid" id="projGrid">
+          <!-- card 0 -->
+          <div class="proj-card" data-cat="osint">
+            <div class="proj-top">
+              <span class="proj-id">INC-2026-007</span>
+              <span
+                class="proj-cat"
+                style="background: var(--amber-soft); color: var(--amber)"
+                >Threat Intel / Phishing</span
+              >
+            </div>
+            <h4>SOC Analyst Phishing Investigation Lab</h4>
+            <p class="proj-desc">
+              Investigated a reported phishing domain end-to-end — OSINT
+              verification, IOC collection, and infrastructure analysis — and
+              produced a professional SOC investigation report.
+            </p>
+            <div class="proj-actions">
+              <button class="proj-toggle" onclick="toggleProj(this)">
+                Details
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <a
+                class="proj-link"
+                href="https://github.com/iamtimofe/Joseph-Abidoye-Cybersecurity-Portfolio/blob/main/SOC-Phishing-Investigation-Lab/README.md"
+                target="_blank"
+                rel="noopener"
+                >View report <span class="arrow">→</span></a
+              >
+            </div>
+            <div class="proj-details">
+              <div class="detail-field">
+                <span class="detail-label">Goal</span>
+                <p>
+                  Validate a reported phishing URL using OSINT, collect
+                  Indicators of Compromise, and investigate the hosting
+                  infrastructure behind it.
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">Tools</span>
+                <p>
+                  PhishTank, VirusTotal, IPinfo, AbuseIPDB, dig, whois, curl
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">What I Did</span>
+                <ul>
+                  <li>
+                    Verified the domain as a confirmed phishing site via
+                    PhishTank and VirusTotal vendor detections
+                  </li>
+                  <li>
+                    Ran DNS (A/NS/MX/TXT), WHOIS, and HTTP header analysis to
+                    profile the malicious domain and its registrar
+                  </li>
+                  <li>
+                    Investigated hosting infrastructure with IPinfo and
+                    AbuseIPDB, tracing the IP to a hosting provider in
+                    Frankfurt, Germany
+                  </li>
+                  <li>
+                    Compiled IOCs and mapped findings to MITRE ATT&amp;CK
+                    (T1566.002 Phishing: Link, T1583 Acquire Infrastructure)
+                  </li>
+                </ul>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">What I Learned</span>
+                <p>
+                  How to chain passive OSINT sources into a single evidence
+                  trail — from initial verification through infrastructure
+                  attribution — without any direct interaction with the
+                  malicious target.
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">Skills Improved</span>
+                <div class="skills-row">
+                  <span class="skill-chip">Threat intelligence</span
+                  ><span class="skill-chip">IOC collection</span
+                  ><span class="skill-chip">DNS &amp; WHOIS analysis</span
+                  ><span class="skill-chip">SOC investigation reporting</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- card 1 -->
           <div class="proj-card" data-cat="web">
             <div class="proj-top">
@@ -2337,6 +2592,7 @@
               <li>WHOIS &amp; DNS enumeration</li>
               <li>Nmap host/service scanning</li>
               <li>Attack surface mapping</li>
+              <li>Threat intel &amp; IOC triage (VirusTotal, AbuseIPDB)</li>
             </ul>
           </div>
           <div class="comp-card">
@@ -2470,7 +2726,9 @@
               ><span class="skill-tag">theHarvester</span
               ><span class="skill-tag">WHOIS</span
               ><span class="skill-tag">dig</span
-              ><span class="skill-tag">Google Dorking</span>
+              ><span class="skill-tag">Google Dorking</span
+              ><span class="skill-tag">VirusTotal</span
+              ><span class="skill-tag">AbuseIPDB</span>
             </div>
           </div>
           <div class="skill-cat-card">
@@ -2825,6 +3083,48 @@
 
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      // ---------- theme (light by day, dark by night, manual override) ----------
+      const SUN_ICON =
+        '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+      const MOON_ICON =
+        '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>';
+
+      function autoTheme() {
+        const h = new Date().getHours();
+        return h >= 6 && h < 18 ? "light" : "dark";
+      }
+      function paintThemeIcon(theme) {
+        const icon = document.getElementById("themeIcon");
+        if (!icon) return;
+        icon.innerHTML = theme === "light" ? MOON_ICON : SUN_ICON;
+      }
+      function applyTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        paintThemeIcon(theme);
+        const btn = document.getElementById("themeToggle");
+        if (btn) {
+          btn.setAttribute(
+            "aria-label",
+            theme === "light" ? "Switch to dark mode" : "Switch to light mode",
+          );
+        }
+      }
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute("data-theme");
+        const next = current === "light" ? "dark" : "light";
+        localStorage.setItem("theme-preference", next);
+        applyTheme(next);
+      }
+      // paint the correct icon for whatever the blocking head script already set
+      paintThemeIcon(document.documentElement.getAttribute("data-theme"));
+      // if the visitor hasn't manually overridden, re-check every 5 min so a
+      // long-open tab still flips from light to dark at sunset (and back)
+      setInterval(() => {
+        if (!localStorage.getItem("theme-preference")) {
+          applyTheme(autoTheme());
+        }
+      }, 300000);
 
       // nav scroll state + active link + mobile menu
       const navEl = document.getElementById("nav");
