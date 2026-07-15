@@ -179,7 +179,11 @@
         inset: 0;
         background-image:
           linear-gradient(var(--grid-line) 1px, transparent 1px),
-          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+          linear-gradient(
+            90deg,
+            var(--grid-line) 1px,
+            transparent 1px
+          );
         background-size: 48px 48px;
         mask-image: radial-gradient(
           ellipse 70% 50% at 50% 0%,
@@ -1498,32 +1502,16 @@
       <div class="nav-inner">
         <div class="brand">
           <span class="brand-mark">
-            <svg
-              width="100"
-              height="100"
-              viewBox="0 0 100 100"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient
-                  id="navShieldStroke"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <stop offset="0%" stop-color="#3B82F6" />
-                  <stop offset="100%" stop-color="#22C55E" />
+                <linearGradient id="navShieldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#3B82F6"/>
+                  <stop offset="100%" stop-color="#22C55E"/>
                 </linearGradient>
               </defs>
-              <rect width="100" height="100" rx="22" fill="#0B1120" />
-              <path
-                d="M50 20 L78 32 V52 C78 68 66 80 50 86 C34 80 22 68 22 52 V32 Z"
-                fill="none"
-                stroke="url(#navShieldStroke)"
-                stroke-width="6"
-              />
-              <circle cx="50" cy="52" r="8" fill="#22C55E" />
+              <rect width="100" height="100" rx="22" fill="#0B1120"/>
+              <path d="M50 20 L78 32 V52 C78 68 66 80 50 86 C34 80 22 68 22 52 V32 Z" fill="none" stroke="url(#navShieldStroke)" stroke-width="6"/>
+              <circle cx="50" cy="52" r="8" fill="#22C55E"/>
             </svg>
           </span>
           <div>
@@ -1590,13 +1578,7 @@
             >
               <line class="h-line h-line-top" x1="3" y1="6" x2="21" y2="6" />
               <line class="h-line h-line-mid" x1="3" y1="12" x2="21" y2="12" />
-              <line
-                class="h-line h-line-bottom"
-                x1="3"
-                y1="18"
-                x2="21"
-                y2="18"
-              />
+              <line class="h-line h-line-bottom" x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
         </div>
@@ -1661,7 +1643,7 @@
             <a class="btn btn-ghost" href="#contact">Contact Me</a>
           </div>
           <div class="stat-row">
-            <div class="stat"><b>9</b><span>Projects Logged</span></div>
+            <div class="stat"><b>10</b><span>Projects Logged</span></div>
             <div class="stat"><b>6</b><span>Security Domains</span></div>
             <div class="stat"><b>NG</b><span>Based In</span></div>
             <div class="stat"><b>Nov '25</b><span>Started Training</span></div>
@@ -1682,7 +1664,7 @@
               <div class="avatar-fallback" style="display: none">JA</div>
             </div>
           </div>
-          <!-- <div class="avatar-tag">SOC-2026 // JA</div>  -->
+         <!-- <div class="avatar-tag">SOC-2026 // JA</div>  -->
         </div>
       </div>
 
@@ -1707,6 +1689,111 @@
         </div>
 
         <div class="proj-grid" id="projGrid">
+          <div class="proj-card" data-cat="siem">
+            <div class="proj-top">
+              <span class="proj-id">INC-2026-008</span>
+              <span
+                class="proj-cat"
+                style="background: var(--primary-soft); color: var(--primary)"
+                >Windows Forensics / SOC</span
+              >
+            </div>
+            <h4>Windows Security Event Investigation Lab</h4>
+            <p class="proj-desc">
+              Ran a full SOC-style investigation inside an isolated Windows
+              Server 2022 + Kali Linux lab from network enumeration
+              through failed/successful logons, account creation, and
+              privilege escalation and produced a complete incident report.
+            </p>
+            <div class="proj-actions">
+              <button class="proj-toggle" onclick="toggleProj(this)">
+                Details
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <a
+                class="proj-link"
+                href="https://github.com/iamtimofe/Joseph-Abidoye-Cybersecurity-Portfolio/blob/main/Windows-Event-Investigation-Lab/README.md"
+                target="_blank"
+                rel="noopener"
+                >View report <span class="arrow">→</span></a
+              >
+            </div>
+            <div class="proj-details">
+              <div class="detail-field">
+                <span class="detail-label">Goal</span>
+                <p>
+                  Simulate realistic Windows security events, investigate
+                  Security Logs for suspicious authentication and account
+                  activity, collect IOCs, and document findings using a
+                  structured SOC investigation methodology.
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">Tools</span>
+                <p>
+                  Windows Event Viewer, PowerShell, Nmap, NetExec
+                  (CrackMapExec), SMB tools
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">What I Did</span>
+                <ul>
+                  <li>
+                    Enumerated the target Windows Server from Kali Linux with
+                    Nmap and NetExec, identifying SMB (445) and WinRM (5985)
+                    exposed with SMBv1 disabled
+                  </li>
+                  <li>
+                    Investigated Event ID 4625 (failed logon) and 4624
+                    (successful logon), correlating target account, logon
+                    type, and source information
+                  </li>
+                  <li>
+                    Traced Event ID 4720 (user account created) and 4732
+                    (added to Administrators group), confirming a privilege
+                    escalation path
+                  </li>
+                  <li>
+                    Performed a remote SMB authentication attempt from Kali
+                    via NetExec, capturing the resulting Logon Type 3 failure
+                    with full source-IP visibility
+                  </li>
+                  <li>
+                    Built an investigation timeline, IOC report, and full
+                    incident report mapped to MITRE ATT&amp;CK (T1078,
+                    T1098, T1110, T1136)
+                  </li>
+                </ul>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">What I Learned</span>
+                <p>
+                  How to correlate network-side activity (Nmap/NetExec
+                  scans) with the exact Windows Security Log events they
+                  generate, so a SOC alert can be traced back to a concrete,
+                  attributable action rather than treated in isolation.
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">Skills Improved</span>
+                <div class="skills-row">
+                  <span class="skill-chip">Windows Event Log analysis</span
+                  ><span class="skill-chip">Authentication monitoring</span
+                  ><span class="skill-chip">Privilege escalation detection</span
+                  ><span class="skill-chip">IOC collection</span
+                  ><span class="skill-chip">MITRE ATT&amp;CK mapping</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- card 0 -->
           <div class="proj-card" data-cat="osint">
             <div class="proj-top">
@@ -1719,9 +1806,9 @@
             </div>
             <h4>SOC Analyst Phishing Investigation Lab</h4>
             <p class="proj-desc">
-              Investigated a reported phishing domain end-to-end OSINT
-              verification, IOC collection, and infrastructure analysis and
-              produced a professional SOC investigation report.
+              Investigated a reported phishing domain end-to-end — OSINT
+              verification, IOC collection, and infrastructure analysis
+              and produced a professional SOC investigation report.
             </p>
             <div class="proj-actions">
               <button class="proj-toggle" onclick="toggleProj(this)">
@@ -1754,9 +1841,7 @@
               </div>
               <div class="detail-field">
                 <span class="detail-label">Tools</span>
-                <p>
-                  PhishTank, VirusTotal, IPinfo, AbuseIPDB, dig, whois, curl
-                </p>
+                <p>PhishTank, VirusTotal, IPinfo, AbuseIPDB, dig, whois, curl</p>
               </div>
               <div class="detail-field">
                 <span class="detail-label">What I Did</span>
@@ -1784,8 +1869,8 @@
                 <span class="detail-label">What I Learned</span>
                 <p>
                   How to chain passive OSINT sources into a single evidence
-                  trail from initial verification through infrastructure
-                  attribution without any direct interaction with the
+                  trail — from initial verification through infrastructure
+                  attribution — without any direct interaction with the
                   malicious target.
                 </p>
               </div>
@@ -1811,7 +1896,7 @@
                 >Web AppSec</span
               >
             </div>
-            <h4>Web Application Vulnerabilities &amp; Exploitation - DVWA</h4>
+            <h4>Web Application Vulnerabilities &amp; Exploitation — DVWA</h4>
             <p class="proj-desc">
               Discovered and exploited SQL Injection, Reflected XSS, and CSRF
               against DVWA, then produced OWASP-aligned remediation guidance.
@@ -2693,7 +2778,9 @@
               ><span class="skill-tag">SPL</span
               ><span class="skill-tag">Wazuh</span
               ><span class="skill-tag">File Integrity Monitoring</span
-              ><span class="skill-tag">Windows Event Logs</span>
+              ><span class="skill-tag">Windows Event Logs</span
+              ><span class="skill-tag">Windows Event Viewer</span
+              ><span class="skill-tag">PowerShell</span>
             </div>
           </div>
           <div class="skill-cat-card">
@@ -2702,6 +2789,7 @@
               <span class="skill-tag">OWASP Top 10</span
               ><span class="skill-tag">Burp Suite</span
               ><span class="skill-tag">Nmap</span
+              ><span class="skill-tag">NetExec</span
               ><span class="skill-tag">Wireshark</span
               ><span class="skill-tag">SQL Injection</span
               ><span class="skill-tag">XSS</span
