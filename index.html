@@ -766,10 +766,117 @@
         color: #fff;
       }
 
+      .proj-slider-wrap {
+        position: relative;
+      }
+      .proj-slider {
+        overflow: hidden;
+      }
       .proj-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 20px;
+      }
+      .proj-grid.anim-fwd {
+        animation: projSlideFwd 0.4s ease;
+      }
+      .proj-grid.anim-back {
+        animation: projSlideBack 0.4s ease;
+      }
+      @keyframes projSlideFwd {
+        from {
+          opacity: 0;
+          transform: translateX(28px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes projSlideBack {
+        from {
+          opacity: 0;
+          transform: translateX(-28px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .proj-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 5;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s,
+          opacity 0.2s,
+          transform 0.2s;
+      }
+      .proj-nav:hover {
+        border-color: var(--primary-line);
+        color: var(--primary);
+        background: var(--primary-soft);
+      }
+      .proj-nav svg {
+        width: 16px;
+        height: 16px;
+      }
+      .proj-nav-prev {
+        left: 0;
+      }
+      .proj-nav-next {
+        right: 0;
+      }
+      .proj-nav.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-50%) scale(0.85);
+      }
+      .proj-dots {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 22px;
+      }
+      .proj-dot {
+        width: 7px;
+        height: 7px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background: var(--border);
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          width 0.2s;
+      }
+      .proj-dot:hover {
+        background: var(--border-hi);
+      }
+      .proj-dot.active {
+        width: 20px;
+        border-radius: 4px;
+        background: var(--primary);
+      }
+      @media (min-width: 681px) {
+        .proj-slider-wrap {
+          padding: 0 42px;
+        }
       }
       .proj-card {
         background: var(--card);
@@ -957,9 +1064,25 @@
         border: 1px solid rgba(34, 197, 94, 0.25);
       }
 
-      @media (max-width: 780px) {
+      @media (max-width: 980px) {
+        .proj-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 680px) {
         .proj-grid {
           grid-template-columns: 1fr;
+        }
+        .proj-slider-wrap {
+          padding: 0 30px;
+        }
+        .proj-nav {
+          width: 32px;
+          height: 32px;
+        }
+        .proj-nav svg {
+          width: 14px;
+          height: 14px;
         }
       }
 
@@ -1559,7 +1682,7 @@
           </a>
           <a
             class="btn btn-primary btn-sm"
-            href="Joseph_Abidoye_Resume.pdf"
+            href="Abidoye_Joseph_SOC_Resume.pdf"
             download
             >Resume</a
           >
@@ -1623,7 +1746,7 @@
             <a class="btn btn-primary" href="#projects"> View Projects </a>
             <a
               class="btn btn-ghost"
-              href="Joseph_Abidoye_Resume.pdf"
+              href="Abidoye_Joseph_SOC_Resume.pdf"
               download
             >
               <svg
@@ -1674,7 +1797,7 @@
           <span class="section-eyebrow">Portfolio</span>
           <h2>Projects &amp; Labs</h2>
           <p>
-            Eight hands-on engagements across cloud, SIEM, networking, web
+            Nine hands-on engagements across cloud, SIEM, networking, web
             security, and OSINT each documented as a structured incident report.
           </p>
         </div>
@@ -1688,7 +1811,130 @@
           <button class="filter-chip" data-filter="systems">Systems</button>
         </div>
 
-        <div class="proj-grid" id="projGrid">
+        <div class="proj-slider-wrap">
+          <button
+            class="proj-nav proj-nav-prev is-hidden"
+            id="projPrev"
+            aria-label="Previous projects"
+            onclick="changeProjPage(-1)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+
+          <div class="proj-slider" id="projSlider">
+            <div class="proj-grid" id="projGrid">
+          <div class="proj-card" data-cat="siem">
+            <div class="proj-top">
+              <span class="proj-id">INC-2026-009</span>
+              <span
+                class="proj-cat"
+                style="background: var(--primary-soft); color: var(--primary)"
+                >Endpoint Monitoring / SOC</span
+              >
+            </div>
+            <h4>Sysmon Endpoint Monitoring &amp; Threat Hunting Lab</h4>
+            <p class="proj-desc">
+              Deployed Microsoft Sysmon on a domain-joined Windows Server 2022
+              host, validated process, network, file, and DNS telemetry, and
+              documented findings with full IOC collection and MITRE
+              ATT&amp;CK mapping.
+            </p>
+            <div class="proj-actions">
+              <button class="proj-toggle" onclick="toggleProj(this)">
+                Details
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <a
+                class="proj-link"
+                href="https://github.com/iamtimofe/Joseph-Abidoye-Cybersecurity-Portfolio/blob/main/Sysmon-Endpoint-Monitoring-Lab/README.md"
+                target="_blank"
+                rel="noopener"
+                >View report <span class="arrow">→</span></a
+              >
+            </div>
+            <div class="proj-details">
+              <div class="detail-field">
+                <span class="detail-label">Goal</span>
+                <p>
+                  Validate that a custom Sysmon configuration correctly
+                  captures core endpoint telemetry, then use that telemetry to
+                  reconstruct system activity the way a SOC analyst would
+                  during an investigation.
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">Tools</span>
+                <p>
+                  Microsoft Sysmon, SwiftOnSecurity config, Windows Event
+                  Viewer, Windows Server 2022
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">What I Did</span>
+                <ul>
+                  <li>
+                    Deployed Sysmon on a domain controller and imported a
+                    custom configuration to expand logging coverage
+                  </li>
+                  <li>
+                    Generated realistic endpoint activity process launches,
+                    DNS lookups, browsing, and file downloads to trigger
+                    each rule category
+                  </li>
+                  <li>
+                    Investigated and documented Event ID 1 (Process Create),
+                    3 (Network Connection), 11 (File Create), and 22 (DNS
+                    Query) in Event Viewer
+                  </li>
+                  <li>
+                    Collected IOCs (process names, GUIDs, file paths, DNS
+                    queries) and built an investigation timeline and final
+                    incident report
+                  </li>
+                  <li>
+                    Mapped findings to MITRE ATT&amp;CK (T1059, T1071,
+                    T1071.004, T1105) and NIST CSF 2.0 Detect functions
+                  </li>
+                </ul>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">What I Learned</span>
+                <p>
+                  Default Windows logging misses most of what an attacker
+                  actually does on a host Sysmon's process, network, file,
+                  and DNS telemetry is what turns isolated events into a
+                  traceable chain of activity.
+                </p>
+              </div>
+              <div class="detail-field">
+                <span class="detail-label">Skills Improved</span>
+                <div class="skills-row">
+                  <span class="skill-chip">Sysmon deployment &amp; tuning</span
+                  ><span class="skill-chip">Endpoint telemetry analysis</span
+                  ><span class="skill-chip">IOC collection</span
+                  ><span class="skill-chip">MITRE ATT&amp;CK mapping</span
+                  ><span class="skill-chip">Incident documentation</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="proj-card" data-cat="siem">
             <div class="proj-top">
               <span class="proj-id">INC-2026-008</span>
@@ -2576,7 +2822,29 @@
               </div>
             </div>
           </div>
+            </div>
+          </div>
+
+          <button
+            class="proj-nav proj-nav-next"
+            id="projNext"
+            aria-label="Next projects"
+            onclick="changeProjPage(1)"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
         </div>
+
+        <div class="proj-dots" id="projDots"></div>
       </section>
 
       <!-- COMPETENCIES / SKILLS -->
@@ -3044,7 +3312,7 @@
 
             <a
               class="connect-card connect-link"
-              href="Joseph_Abidoye_Resume.pdf"
+              href="Abidoye_Joseph_SOC_Resume.pdf"
               download
             >
               <div class="c-icon">
@@ -3266,20 +3534,117 @@
         btn.closest(".proj-card").classList.toggle("open");
       }
 
-      // project filters
+      // project filters + responsive paginated slider
       const filterBtns = document.querySelectorAll(".filter-chip");
-      const projCards = document.querySelectorAll(".proj-card");
+      const allProjCards = Array.from(document.querySelectorAll(".proj-card"));
+      const projGridEl = document.getElementById("projGrid");
+      const projPrevBtn = document.getElementById("projPrev");
+      const projNextBtn = document.getElementById("projNext");
+      const projDotsEl = document.getElementById("projDots");
+      let currentProjFilter = "all";
+      let currentProjPage = 0;
+
+      function getFilteredProjCards() {
+        return allProjCards.filter(
+          (c) => currentProjFilter === "all" || c.dataset.cat === currentProjFilter,
+        );
+      }
+
+      function getProjCardsPerPage() {
+        const cols = getComputedStyle(projGridEl)
+          .gridTemplateColumns.split(" ")
+          .filter(Boolean).length || 1;
+        return cols * 2; // 2 rows per page
+      }
+
+      function renderProjDots(totalPages) {
+        projDotsEl.innerHTML = "";
+        if (totalPages <= 1) {
+          projDotsEl.style.display = "none";
+          return;
+        }
+        projDotsEl.style.display = "flex";
+        for (let i = 0; i < totalPages; i++) {
+          const dot = document.createElement("button");
+          dot.className = "proj-dot" + (i === currentProjPage ? " active" : "");
+          dot.setAttribute("aria-label", "Go to page " + (i + 1));
+          dot.addEventListener("click", () => {
+            const dir = i > currentProjPage ? 1 : -1;
+            currentProjPage = i;
+            renderProjPage(dir);
+          });
+          projDotsEl.appendChild(dot);
+        }
+      }
+
+      function renderProjPage(direction) {
+        const filtered = getFilteredProjCards();
+        const perPage = getProjCardsPerPage();
+        const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+        if (currentProjPage >= totalPages) currentProjPage = totalPages - 1;
+        if (currentProjPage < 0) currentProjPage = 0;
+
+        const start = currentProjPage * perPage;
+        const pageCards = filtered.slice(start, start + perPage);
+        const pageCardSet = new Set(pageCards);
+
+        allProjCards.forEach((card) => {
+          if (pageCardSet.has(card)) {
+            card.style.display = "";
+          } else {
+            card.style.display = "none";
+            card.classList.remove("open");
+          }
+        });
+
+        projGridEl.classList.remove("anim-fwd", "anim-back");
+        void projGridEl.offsetWidth; // force reflow so the animation replays
+        projGridEl.classList.add(direction < 0 ? "anim-back" : "anim-fwd");
+
+        projPrevBtn.classList.toggle("is-hidden", currentProjPage === 0);
+        projNextBtn.classList.toggle(
+          "is-hidden",
+          currentProjPage >= totalPages - 1,
+        );
+
+        renderProjDots(totalPages);
+      }
+
+      function changeProjPage(delta) {
+        currentProjPage += delta;
+        renderProjPage(delta);
+      }
+
       filterBtns.forEach((btn) => {
         btn.addEventListener("click", () => {
           filterBtns.forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
-          const f = btn.dataset.filter;
-          projCards.forEach((card) => {
-            card.style.display =
-              f === "all" || card.dataset.cat === f ? "" : "none";
-          });
+          currentProjFilter = btn.dataset.filter;
+          currentProjPage = 0;
+          renderProjPage(1);
         });
       });
+
+      let projResizeTimer;
+      window.addEventListener("resize", () => {
+        clearTimeout(projResizeTimer);
+        projResizeTimer = setTimeout(() => {
+          // re-anchor to the first card currently on screen so the page
+          // doesn't jump around when the column count changes
+          const filtered = getFilteredProjCards();
+          const perPage = getProjCardsPerPage();
+          const firstVisibleIndex = filtered.findIndex(
+            (c) => c.style.display !== "none",
+          );
+          currentProjPage = Math.max(
+            0,
+            Math.floor((firstVisibleIndex < 0 ? 0 : firstVisibleIndex) / perPage),
+          );
+          renderProjPage(1);
+        }, 150);
+      });
+
+      renderProjPage(1);
 
       // copy email
       function copyEmail(btn) {
