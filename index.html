@@ -878,6 +878,130 @@
           padding: 0 42px;
         }
       }
+
+      /* ---------- project details modal ---------- */
+      body.modal-open {
+        overflow: hidden;
+      }
+      body.modal-open > .bg-fixed,
+      body.modal-open > nav,
+      body.modal-open > .wrap {
+        filter: blur(6px);
+        opacity: 0.35;
+        pointer-events: none;
+      }
+      .bg-fixed,
+      nav,
+      .wrap {
+        transition:
+          filter 0.35s ease,
+          opacity 0.35s ease;
+      }
+      .proj-modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 300;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.3s ease,
+          visibility 0s linear 0.3s;
+      }
+      .proj-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        transition:
+          opacity 0.3s ease,
+          visibility 0s linear 0s;
+      }
+      .proj-modal {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        width: 100%;
+        max-width: 640px;
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 34px;
+        position: relative;
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
+        transform: scale(0.94) translateY(14px);
+        opacity: 0;
+        transition:
+          transform 0.32s ease,
+          opacity 0.32s ease;
+      }
+      .proj-modal-overlay.active .proj-modal {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+      .proj-modal-close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: rgba(var(--overlay-rgb), 0.04);
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .proj-modal-close:hover {
+        color: var(--text);
+        border-color: var(--border-hi);
+        background: rgba(var(--overlay-rgb), 0.08);
+      }
+      .proj-modal-close svg {
+        width: 16px;
+        height: 16px;
+      }
+      .proj-modal-body .proj-top {
+        margin-right: 40px;
+      }
+      .proj-modal-body h4 {
+        font-family: var(--disp);
+        font-size: 21px;
+        margin: 0 0 12px;
+        line-height: 1.3;
+      }
+      .proj-modal-body .proj-desc {
+        font-size: 14px;
+        color: var(--muted);
+        margin: 0 0 18px;
+      }
+      .proj-modal-body .proj-link {
+        margin-bottom: 22px;
+      }
+      .proj-modal-body .proj-details {
+        max-height: none;
+        overflow: visible;
+      }
+      .proj-modal-body .detail-field {
+        margin-bottom: 18px;
+      }
+      @media (max-width: 680px) {
+        .proj-modal-overlay {
+          padding: 12px;
+        }
+        .proj-modal {
+          padding: 24px 20px;
+          max-height: 90vh;
+          border-radius: 16px;
+        }
+        .proj-modal-body h4 {
+          font-size: 18px;
+        }
+      }
       .proj-card {
         background: var(--card);
         border: 1px solid var(--border);
@@ -1766,7 +1890,7 @@
             <a class="btn btn-ghost" href="#contact">Contact Me</a>
           </div>
           <div class="stat-row">
-            <div class="stat"><b>10</b><span>Projects Logged</span></div>
+            <div class="stat"><b>11</b><span>Projects Logged</span></div>
             <div class="stat"><b>6</b><span>Security Domains</span></div>
             <div class="stat"><b>NG</b><span>Based In</span></div>
             <div class="stat"><b>Nov '25</b><span>Started Training</span></div>
@@ -2142,7 +2266,7 @@
                 >Web AppSec</span
               >
             </div>
-            <h4>Web Application Vulnerabilities &amp; Exploitation - DVWA</h4>
+            <h4>Web Application Vulnerabilities &amp; Exploitation DVWA</h4>
             <p class="proj-desc">
               Discovered and exploited SQL Injection, Reflected XSS, and CSRF
               against DVWA, then produced OWASP-aligned remediation guidance.
@@ -2387,7 +2511,7 @@
               <div class="detail-field">
                 <span class="detail-label">What I Learned</span>
                 <p>
-                  EventBridge reacted in under 10 seconds vs. 3–5 minutes for
+                  EventBridge reacted in under 10 seconds vs. 3-5 minutes for
                   CloudWatch metric filters event-driven detection beats
                   polling when response time matters, especially in
                   banking-grade environments.
@@ -3437,6 +3561,34 @@
       </footer>
     </div>
 
+    <!-- PROJECT DETAILS MODAL -->
+    <div
+      class="proj-modal-overlay"
+      id="projModalOverlay"
+      onclick="handleProjModalOverlayClick(event)"
+    >
+      <div class="proj-modal" id="projModal">
+        <button
+          class="proj-modal-close"
+          onclick="closeProjModal()"
+          aria-label="Close details"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+        <div class="proj-modal-body" id="projModalBody"></div>
+      </div>
+    </div>
+
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -3529,10 +3681,54 @@
       );
       revealEls.forEach((el) => io.observe(el));
 
-      // project card toggle
+      // project card details -> opens in a focused modal, dimming/blurring
+      // the rest of the site for readability
+      const projModalOverlay = document.getElementById("projModalOverlay");
+      const projModalBody = document.getElementById("projModalBody");
+      let lastFocusedProjBtn = null;
+
       function toggleProj(btn) {
-        btn.closest(".proj-card").classList.toggle("open");
+        const card = btn.closest(".proj-card");
+        lastFocusedProjBtn = btn;
+        openProjModal(card);
       }
+
+      function openProjModal(card) {
+        const top = card.querySelector(".proj-top");
+        const title = card.querySelector("h4");
+        const desc = card.querySelector(".proj-desc");
+        const link = card.querySelector(".proj-link");
+        const details = card.querySelector(".proj-details");
+
+        projModalBody.innerHTML = "";
+        if (top) projModalBody.appendChild(top.cloneNode(true));
+        if (title) projModalBody.appendChild(title.cloneNode(true));
+        if (desc) projModalBody.appendChild(desc.cloneNode(true));
+        if (link) projModalBody.appendChild(link.cloneNode(true));
+        if (details) projModalBody.appendChild(details.cloneNode(true));
+
+        projModalOverlay.classList.add("active");
+        document.body.classList.add("modal-open");
+      }
+
+      function closeProjModal() {
+        projModalOverlay.classList.remove("active");
+        document.body.classList.remove("modal-open");
+        if (lastFocusedProjBtn) {
+          lastFocusedProjBtn.focus();
+          lastFocusedProjBtn = null;
+        }
+      }
+
+      function handleProjModalOverlayClick(e) {
+        if (e.target === projModalOverlay) closeProjModal();
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && projModalOverlay.classList.contains("active")) {
+          closeProjModal();
+        }
+      });
 
       // project filters + responsive paginated slider
       const filterBtns = document.querySelectorAll(".filter-chip");
